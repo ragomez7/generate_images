@@ -1,0 +1,43 @@
+from PIL import Image
+from PIL import ImageFont
+from PIL import ImageDraw
+import numpy as np
+import random
+
+while True:
+    
+    number_of_images = int(input("""
+    This program generates a given number of images containing only digits and the characters '-' and ' '.
+    /// The fonts used per image are random, from font_size = 14 to 28
+    /// The font used is kredit_back.ttf. You should have this file on the current path.
+    /// The images are going to be saved in the generated_imgs folder
+
+    How many images do you want to generate? An integer less than 100000 is expected: 
+
+    """))
+    if number_of_images < 100000:
+        for j in range(number_of_images):
+
+            char_numbers = np.random.randint(6,12)
+            word = ''
+            vocab = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', ' ']
+
+            for i in range(char_numbers):
+                word = word + random.choice(vocab)
+            word_length = len(word)
+            font_size_array = [14, 16, 18, 20, 22, 24, 26, 28]
+            font_size = random.choice(font_size_array)
+            img_width = int(np.floor(word_length**2.45))
+            img_height = int(np.floor(1.5*font_size))
+            img = Image.new("RGB", (img_width, img_height), (255, 255, 255))
+            draw = ImageDraw.Draw(img)
+
+            font = ImageFont.truetype("kredit_back.ttf", font_size)
+            w, h = draw.textsize(word, font)
+            draw.text(((img_width-w)/2, (img_height-h)/2),word,(0, 0, 0),font=font, align='center')
+            image_name = "./generated_imgs/" + str(j) + ".png"
+            img.save(image_name, "png", dpi=(300,300))
+        break
+    else:
+        print("Insert a number lesser than 100000")
+        break
